@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class GalleryService
 {
@@ -29,12 +28,11 @@ class GalleryService
     {
         $imageContent = Storage::disk('public')->get('tmp/' . $image);
 
-        $img = Image::make($imageContent);
-        $img->greyscale()->colorize(60, 40, 20)->brightness(-40);
+        $imagick = new \Imagick();
+        $imagick->readImageBlob($imageContent);
+        $imagick->sepiaToneImage(90);
 
-        Storage::disk('public')->put('tmp/' . $image, (string)$img->encode());
-
-        $img->destroy();
+        Storage::disk('public')->put('tmp/' . $image, $imagick->getImage());
     }
 
     /**

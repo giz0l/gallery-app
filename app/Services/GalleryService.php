@@ -9,9 +9,9 @@ use Intervention\Image\Facades\Image;
 class GalleryService
 {
     /**
-     * Pobieranie tablicy image_id z api
+     * Pobiera tablice image_id z api
      */
-    private function getImagesIdsFromApi(int $number = 5): array
+    private function getImagesIdsFromApi(int $number): array
     {
         $images = Http::get('https://api.artic.edu/api/v1/artworks?fields=image_id&limit='.$number);
 
@@ -25,7 +25,7 @@ class GalleryService
     /**
      * Konwertuje do sepii
      */
-    private function convertToSepia($image): void
+    private function convertToSepia(string $image): void
     {
         $imageContent = Storage::disk('public')->get('tmp/' . $image);
 
@@ -38,11 +38,11 @@ class GalleryService
     }
 
     /**
-     * Zapisujemy zdjęcia do tmp
+     * Zapisuje zdjęcia do tmp
      */
-    public function saveImages(): void
+    public function saveImages(int $quantity): void
     {
-        $imageIds = $this->getImagesIdsFromApi(30);
+        $imageIds = $this->getImagesIdsFromApi($quantity);
 
         if(count($imageIds) > 0){
             foreach($imageIds as $image){
@@ -55,7 +55,7 @@ class GalleryService
     }
 
     /**
-     * Pobieramy tablice ze zdjęciami z folderu tmp
+     * Pobiera tablice z plikami z folderu tmp
      */
     public function getImages(): array
     {

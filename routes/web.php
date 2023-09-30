@@ -13,4 +13,5 @@ use App\Http\Controllers\GalleryController;
 |
 */
 
-Route::get('/', [GalleryController::class, 'index']);
+Route::get('/', [GalleryController::class, 'index'])->name('index');
+Route::post('/getImages', [GalleryController::class, 'getImages'])->name('getImages');
